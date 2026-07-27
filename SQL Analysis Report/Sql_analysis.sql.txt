@@ -20,7 +20,7 @@ Before I touched any analysis, I looked at the raw file and the Region column wa
 some had "region_a", some had extra spaces like " Region B ". If I grouped by Region without fixing this,
 the same region would get split into 4-5 fake categories. So this had to be fixed first.
 
-CREATE OR REPLACE TABLE credit_pay_dataset.credit_pay_clean AS
+'''CREATE OR REPLACE TABLE credit_pay_dataset.credit_pay_clean AS
 SELECT
 CountryCode,
 INITCAP(
@@ -39,7 +39,7 @@ SettledDate,
 PaperlessBill,
 DaysToSettle,
 DaysLate
-FROM credit_pay_dataset.credit_pay_raw
+FROM credit_pay_dataset.credit_pay_raw'''
 
 This lowercases everything first, replaces underscores and hyphens with spaces, trims extra spaces,
 then capitalizes the first letter properly. CREATE OR REPLACE TABLE actually builds this out as a
@@ -49,13 +49,13 @@ Step 1: Which region is actually the slowest?
 
 The first thing I wanted to know was simple — is there even a real difference between regions, or is delay just random across the board.
 
-select
+'''select
 Region,
 round(avg(DaysLate), 2) as Avg_delay_days
 from
 credit_pay_dataset.credit_pay_clean
 group by 1
-order by 2 desc;
+order by 2 desc;'''
 
 Region C came out worst at 4.82 days average delay, then B (3.94), E (3.64), D (3.61), and Region
 A was way better at just 1.85 days. So yes, there's a real gap here — now I needed to know why.
@@ -64,7 +64,7 @@ Step 2: My first guess — is it disputes?
 
 My instinct was that disputes were driving the delay, so I checked raw counts of late payments split by disputed vs not disputed, per region.
 
-select
+'''select
 Region,
 sum(case when Disputed is true then 1 else 0 end) as late_pays_when_disputed,
 sum(case when Disputed is false then 1 else 0 end) as late_pays_when_no_disputed
@@ -72,7 +72,7 @@ from
 credit_pay_dataset.credit_pay_clean
 where DaysLate > 0
 group by 1
-order by 2 desc;
+order by 2 desc;'''
 
 This is where I got it wrong the first time. Region B showed more disputed late-pays than non-disputed, but Region E showed the
 opposite — more non-disputed late-pays. Based on this I assumed dispute wasn't a real factor in regions like A, D, and E.
@@ -84,7 +84,7 @@ Step 3: Fixing it — comparing rates instead of raw counts
 
 So I redid it properly, calculating the percentage of late payments within disputed invoices and within non-disputed invoices, separately for each region.
 
-select
+'''select
 Region,
 round(sum(case when Disputed is true and DaysLate > 0 then 1 else 0 end) * 100.0 /
 sum(case when Disputed is true then 1 else 0 end), 1) as pct_disputed_late,
@@ -92,7 +92,7 @@ round(sum(case when Disputed is false and DaysLate > 0 then 1 else 0 end) * 100.
 sum(case when Disputed is false then 1 else 0 end), 1) as pct_nondisputed_late
 from credit_pay_dataset.credit_pay_clean
 group by 1
-order by 2 desc;
+order by 2 desc;'''
 
 This is where the real pattern showed up. Every single region had a disputed late-rate 2-3.5x higher
 than the non-disputed rate — Region E (81.3% vs 30.8%), Region A (72.1% vs 20.4%), Region C (70.5% vs 23.1%),
@@ -103,13 +103,13 @@ Step 4: Making sure it's not just one difficult customer
 
 Before trusting this pattern, I wanted to rule out one thing — what if a handful of problem customers were skewing the whole dispute number.
 
-select
+'''select
 CustomerID,
 sum(case when Disputed is true then 1 else 0 end) as disputed_count
 from
 credit_pay_dataset.credit_pay_clean
 group by 1
-order by 2 desc
+order by 2 desc'''
 
 The top customer only had 27 disputes, and it dropped off gradually from there (25, 24, 24, 23...).
 No single customer was driving this — the disputes were spread across a lot of customers,
@@ -119,7 +119,7 @@ Step 5: Does the length of delay matter?
 
 Next question — does it matter if a payment is a little late versus very late? I bucketed invoices by how many days late they were.
 
-with bucket as (
+'''with bucket as (
 select ,
 case
 when DaysLate = 0 then "on time"
@@ -135,7 +135,7 @@ count() as payments_count,
 sum(case when Disputed is true then 1 else 0 end) as disputed_count,
 round(sum(case when Disputed is true then 1 else 0 end) * 100 / count(*), 1) as pct_disputed
 from bucket
-group by 1
+group by 1'''
 
 This turned out to be the strongest finding in the whole analysis. On-time payments were only 11.2% disputed,
  1-15 days late was 36.6%, 16-30 days was 71.7%, and 30+ days late was 87.5% disputed. The longer the delay,
@@ -146,15 +146,15 @@ Step 6: Does invoice size matter?
 
 I also wanted to check if bigger invoices took longer to settle. First I checked the range.
 
-select
+'''select
 min(InvoiceAmount) as min_invoice_amount,
 max(InvoiceAmount) as max_invoice_amount
 from
-credit_pay_dataset.credit_pay_clean
+credit_pay_dataset.credit_pay_clean'''
 
 Range was $5.26 to $128.28. I split that into three buckets.
 
-with level as (
+'''with level as (
 select
 ,
 case
@@ -172,7 +172,7 @@ sum(case when Disputed is true then 1 else 0 end) as disputed_count,
 round(sum(case when Disputed is true then 1 else 0 end) * 100.0 / count(), 1) as pct_disputed
 from
 level
-group by amount_level
+group by amount_level'''
 
 Days to settle was almost identical across all three buckets (26.1, 26.2, 28.9) — amount doesn't really affect how long settlement takes.
 Dispute percent did creep up a bit with amount (16.0% to 23.0% to 35.6%), but nowhere near as strong as the region or aging-bucket pattern.
@@ -182,7 +182,7 @@ Step 7: Paper vs Electronic billing
 
 This one felt like a practical, fixable factor — does the billing method itself change how fast people pay.
 
-select
+'''select
 PaperlessBill,
 count() as late_pays,
 sum(case when Disputed is true then 1 else 0 end) as disputed_count,
@@ -190,16 +190,16 @@ round(sum(case when Disputed is true then 1 else 0 end) * 100.0 / count(), 1) as
 from
 credit_pay_dataset.credit_pay_clean
 where DaysLate > 0
-group by 1
+group by 1'''
 
 I also checked the total invoice count per group to make sure the comparison was fair.
 
-select
+'''select
 PaperlessBill,
 count(*) as invoice_count
 from
 credit_pay_dataset.credit_pay_clean
-group by 1
+group by 1'''
 
 Paper and Electronic had almost the same total invoice count (1263 vs 1203), so a direct comparison was fine here.
 Paper invoices were late 43.2% of the time, Electronic only 27.5% — a genuine 15.7 percentage point gap.
@@ -210,7 +210,7 @@ Step 8: A hypothesis that didn't hold up
 
 One more idea — maybe payments due near month-end are more likely to be late, since that's when people's own cash might be tighter.
 
-select
+'''select
 case
 when EXTRACT(DAY FROM DueDate) >= 25 then "Month End (25-31)"
 else "Not Month End"
@@ -219,7 +219,7 @@ count() as total_invoices,
 sum(case when DaysLate > 0 then 1 else 0 end) as late_count,
 round(sum(case when DaysLate > 0 then 1 else 0 end) * 100.0 / count(), 1) as pct_late
 from credit_pay_dataset.credit_pay_clean
-group by 1
+group by 1'''
 
 35.8% versus 34.6% — basically no difference. This hypothesis didn't hold up, and that's still worth mentioning,
 because it shows the delay isn't about when the due date falls on the calendar — it's about dispute handling and billing format, not timing.
