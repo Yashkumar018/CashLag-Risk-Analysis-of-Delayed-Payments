@@ -8,7 +8,7 @@ This analysis was built to answer one core question: what is actually driving th
 
 ---
 
-[cover page photo]
+![image alt](https://github.com/Yashkumar018/CashLag-Risk-Analysis-of-Delayed-Payments/blob/081595b661fc92b8c0a82e078c5892f1897cc28c/Screenshots/Cover%20page.png)
 
 ---
 
@@ -49,7 +49,7 @@ In dollar terms, those 877 late invoices add up to $53.96K currently sitting ove
 
 Breaking the delays down by how long they dragged on: 28.5% of invoices were 1-15 days late, 6.7% were 16-30 days late, and only 0.3% (just 8 invoices) crossed 30+ days late. The remaining 64% of invoices were paid on time.
 
-[risk overview page photo]
+![image alt](https://github.com/Yashkumar018/CashLag-Risk-Analysis-of-Delayed-Payments/blob/081595b661fc92b8c0a82e078c5892f1897cc28c/Screenshots/Risk%20Overview.png)
 
 **Key Insights:**
 
@@ -65,7 +65,9 @@ The most disputed bucket by far is the 30+ days late group — 87.50% of those i
 
 The second factor worth calling out is billing method. Out of 2,466 invoices, Paper billing accounted for 1,263 and Electronic accounted for 1,203 — a nearly even split, which makes them directly comparable. Paper invoices were late 43.23% of the time, versus just 27.51% for Electronic. That gap makes sense — electronic invoices typically come with automatic reminders and notifications that keep the due date top of mind, while paper invoices don't have that safety net.
 
-[root cause & recommendation page photo]
+
+![image alt](https://github.com/Yashkumar018/CashLag-Risk-Analysis-of-Delayed-Payments/blob/081595b661fc92b8c0a82e078c5892f1897cc28c/Screenshots/Root%20Cause%20Analysis%20%26%20Strategy.png)
+
 
 **Recommendation:**
 
