@@ -23,7 +23,7 @@ The analysis is structured across two dashboard pages:
 | SQL Analysis Report | [Download here](https://github.com/Yashkumar018/CashLag-Risk-Analysis-of-Delayed-Payments/blob/ac78fa6f247cec85dc30431930b6df5e0796140a/SQL%20Analysis%20Report/Sql_analysis_report.docx) |
 | Dataset (Dirty & Cleaned) | [Download here](https://github.com/Yashkumar018/CashLag-Risk-Analysis-of-Delayed-Payments/tree/ac78fa6f247cec85dc30431930b6df5e0796140a/Data) |
 
-[power bi dashboard gif]
+<img width="1000" height="500" alt="Image" src="https://github.com/user-attachments/assets/8350124a-79d3-4fe7-9177-2ef89d41f786" />
 
 ---
 
