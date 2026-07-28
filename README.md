@@ -19,9 +19,9 @@ The analysis is structured across two dashboard pages:
 
 | Resource | Link |
 |---|---|
-| Interactive Power BI Dashboard | [Download here] |
-| SQL Analysis Report | [Download here] |
-| Dataset (Dirty & Cleaned) | [Download here] |
+| Interactive Power BI Dashboard | [Download here](https://github.com/Yashkumar018/CashLag-Risk-Analysis-of-Delayed-Payments/blob/ac78fa6f247cec85dc30431930b6df5e0796140a/CashLag%20Dashboard.pbix) |
+| SQL Analysis Report | [Download here](https://github.com/Yashkumar018/CashLag-Risk-Analysis-of-Delayed-Payments/blob/ac78fa6f247cec85dc30431930b6df5e0796140a/SQL%20Analysis%20Report/Sql_analysis_report.docx) |
+| Dataset (Dirty & Cleaned) | [Download here](https://github.com/Yashkumar018/CashLag-Risk-Analysis-of-Delayed-Payments/tree/ac78fa6f247cec85dc30431930b6df5e0796140a/Data) |
 
 [power bi dashboard gif]
 
@@ -33,7 +33,7 @@ The dataset includes fields like `DaysLate`, `Disputed`, `Region`, `InvoiceAmoun
 
 <img width="432" height="600" alt="Image" src="https://github.com/user-attachments/assets/107678fa-cb9e-46cf-b46d-b3ea0efc4c8b" />
 
-Both the dirty and cleaned versions of the dataset are available for download [here].
+Both the dirty and cleaned versions of the dataset are available for download [here](https://github.com/Yashkumar018/CashLag-Risk-Analysis-of-Delayed-Payments/tree/ac78fa6f247cec85dc30431930b6df5e0796140a/Data).
 
 ---
 
