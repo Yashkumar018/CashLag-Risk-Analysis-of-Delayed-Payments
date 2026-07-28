@@ -31,7 +31,7 @@ The analysis is structured across two dashboard pages:
 
 The dataset includes fields like `DaysLate`, `Disputed`, `Region`, `InvoiceAmount`, and several others, spread across 2,466 invoices and multiple customers. Before any analysis began, the data was checked for formatting inconsistencies — the `Region` column in particular needed cleaning, since the same region was showing up under several different spellings and formats.
 
-[data structure picture]
+<img width="432" height="600" alt="Image" src="https://github.com/user-attachments/assets/107678fa-cb9e-46cf-b46d-b3ea0efc4c8b" />
 
 Both the dirty and cleaned versions of the dataset are available for download [here].
 
